@@ -235,12 +235,22 @@ single `prompts/` directory; see `tweet/run.sh` for exact invocations.)
 
 ---
 
-## Citation
+## Acknowledgements
 
-```bibtex
-@misc{randomized_quantization,
-  title  = {Protecting Dataset-Level Secrets in Textual Data Sharing},
-  author = {Anonymous Authors},
-  year   = {2026}
-}
-```
+This codebase builds on several open-source projects:
+
+- **[DPSDA](https://github.com/microsoft/DPSDA)** — the Private Evolution
+  (Aug-PE) framework, used as the LLM backbone for snippet extraction,
+  rewriting, and labeling, and as the Private Evolution baseline.
+- **[Opacus](https://github.com/pytorch/opacus)** and
+  **[PEFT](https://github.com/huggingface/peft)** — DP-SGD and LoRA for the
+  DP fine-tuning baseline.
+- **[Sentence-Transformers](https://github.com/UKPLab/sentence-transformers)**
+  — embeddings for the utility metrics (kNN precision/recall, FID).
+- **Llama 3.1** (Meta) and the **PropInfer** and **SemEval-2016 Task 6
+  (Tweet Stance)** datasets used in our experiments.
+
+We thank the authors of these projects for making their work available.
+
+This is research code accompanying our paper; expect interface changes as we
+incorporate feedback.
