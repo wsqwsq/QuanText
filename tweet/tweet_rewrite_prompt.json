@@ -1,0 +1,14 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "**Inputs**\n1. A list of Twitter snippets.\n2. An instruction describing the intended Twitter post, including its topic, stance, and sentiment.\n\n**Task**\n1. For each Twitter snippet, determine whether it aligns with the given instruction (in terms of topic, stance, and sentiment).\n    - Output format: 'Step 1: ' followed by pairs of each phrase and either 'Yes' or 'No'.\n2. Using only the snippets marked 'Yes' in Step 1, compose a *complete* and self-contained Twitter post that follows the instruction. If no snippet is selected, generate the Twitter post that follows the instruction entirely by yourself! ONLY output the generated post! Do not include any explanations, notes, or metadata!\n    - Output format: 'Step 2: ' followed by the generated Twitter post.\n    - Keep the original wording of selected snippets as much as possible. You may make minimal edits (e.g., adjust tense, number, punctuation, or add small connectors) for grammatical correctness and natural flow.\n    - The generated Twitter post should have MORE than 10 words.\n\n\n**An Example**\nTwitter snippets:\npray for us sinners\nAmen\nvery bad\n#rosary\n#teamjesus\n#God\n\nInstruction:\nWrite a Twitter post with hashtags. Please use diverse writing style and tone. The generated Twitter post should have MORE than 10 words. The post may directly or indirectly imply: \nTopic: Atheism\nStance: AGAINST\nSentiment: POSITIVE\n\nOutput:\nStep 1: pray for us sinners - Yes | Amen - Yes | very bad - No | #rosary - Yes | #teamjesus - Yes | #God - Yes\nStep 2: Holy Mary Mother of God, pray for us sinners now and at the hour of our death. Amen. #rosary #teamjesus #God #SemST"
+        },
+        {
+            "role": "user",
+            "content": "Twitter snippets:\n{snippet}\n\nDescription:\nWrite a Twitter post with hashtags. Please use diverse writing style and tone. The generated Twitter post should have MORE than 10 words. The post may directly or **indirectly** imply:\nTopic: {rewrite_topic}\nStance: {rewrite_stance}\nSentiment: {rewrite_sentiment}"
+        }
+    ],
+    "replacement_rules": [
+    ]
+}

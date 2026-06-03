@@ -1,0 +1,18 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You will be given a Twitter post and its topic. Summarize the stance the post takes toward the topic.\n- The stance can ONLY be:\n\t\"FAVOR\",\n\t\"AGAINST\",\n\t\"NONE\".\n- ONLY output the stance (no notes or commentary)."
+        },
+        {
+            "role": "user",
+            "content": "Twitter post: \n{text}\n\nTopic: \n{topic}"
+        }
+    ],
+    "replacement_rules": [
+    	{
+            "constraints": {},
+            "replacements": {}
+        }
+    ]
+}

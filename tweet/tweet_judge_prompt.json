@@ -1,0 +1,14 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "**Inputs**\n1. A description of the target sample.\n2. A list of candidate samples labeled 'Sample 1', 'Sample 2', ... created from that description.\n\n**Task**\nSelect the single candidate that best matches the description.\n\n**Output**\nReturn exactly the string 'Sample n', where n is the chosen sample's number.\nDo not include any other text, notes, or commentary."
+        },
+        {
+            "role": "user",
+            "content": "Description:\nA Twitter post with hashtags. The post may directly or indirectly imply:\nTopic: {topic}\nStance: {stance}\nSentiment: {sentiment}\n\n\nSample Candidates:\n\n{sample}"
+        }
+    ],
+    "replacement_rules": [
+    ]
+}

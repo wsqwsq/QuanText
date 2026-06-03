@@ -1,0 +1,13 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You are given a Patient-Doctor medical dialogue. Infer the most likely gender of the patient from gendered language cues (pronouns, anatomy, conditions, salutations). Output exactly one word: 'female' or 'male'. If truly ambiguous, output your best guess (no other text)."
+        },
+        {
+            "role": "user",
+            "content": "Dialogue:\n{text}\n\nPatient gender:"
+        }
+    ],
+    "replacement_rules": []
+}

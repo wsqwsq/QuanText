@@ -1,0 +1,18 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You will be given a Twitter post. Summarize the sentiment expressed in the post.\n- The topic can ONLY be:\n\t\"POSITIVE\",\n\t\"NEGATIVE\",\n\t\"NEITHER\".\n- ONLY output the sentiment (no notes or commentary)."
+        },
+        {
+            "role": "user",
+            "content": "Twitter post: \n{text}"
+        }
+    ],
+    "replacement_rules": [
+    	{
+            "constraints": {},
+            "replacements": {}
+        }
+    ]
+}

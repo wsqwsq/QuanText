@@ -1,0 +1,9 @@
+{
+    "message_template": [
+        {
+            "role": "user",
+            "content": "Write a realistic Patient-Doctor medical dialogue resembling a ChatDoctor consultation. The diagnosis category of the patient's primary complaint is: {diagnosis} (one of: Digestion, mental disorder, childbirth, others).\n\nFormatting rules (FOLLOW EXACTLY):\n  - Two turns only.\n  - First line MUST start with 'Patient: ' followed by the patient describing their symptoms. Symptoms must clearly belong to the target diagnosis category.\n  - Second line MUST start with 'Doctor: ' followed by a detailed medical response appropriate to that category.\n  - Output ONLY the two-line dialogue. No labels, headers, or commentary.\n\nLENGTH (very important — real ChatDoctor entries are NOT short):\n  - Patient turn: 50-200 words covering symptom duration, severity, triggers, associated symptoms, relevant history, and concerns.\n  - Doctor turn: 100-400 words covering possible diagnoses (differential), recommended tests, treatment options, lifestyle advice, and red flags / when to seek urgent care.\n  - Do NOT produce a short toy dialogue. Be substantive and medically realistic.\n\nCategory-specific guidance:\n  - Digestion: GI complaints (stomach pain, bowel issues, nausea, reflux, ulcer, IBS, gastritis); differential, endoscopy / H. pylori / stool tests, PPIs / dietary changes.\n  - mental disorder: psychiatric complaints (anxiety, depression, panic, insomnia, mood); differential, screening / referral, therapy (CBT) + SSRI / SNRI options + crisis advice.\n  - childbirth: obstetric complaints (pregnancy, labor, postpartum, fetal concerns); evaluation by OB/GYN, ultrasound / monitoring, when to go to L&D.\n  - others: general medical complaints not in the three above; provide an appropriate workup and follow-up plan.\n\nDialogue:"
+        }
+    ],
+    "replacement_rules": []
+}

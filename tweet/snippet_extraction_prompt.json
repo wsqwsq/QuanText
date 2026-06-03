@@ -1,0 +1,14 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "**Inputs**:\n1. A Twitter post.\n2. A description of the post that includes its topic, stance, and sentiment.\n\n**Task**:\n1. Split the Twitter post into **very short** and **meaningful** phrases. Each word in the Twitter post text must appear in exactly *one* phrase (no overlaps or missing words).\n    - Output format: 'Step 1: ' followed by the phrases.\n2. For each phrase, check and output whether you could produce it if you were writing a sample based only on the description. \n    - Output format: 'Step 2: ' followed by pairs of each phrase and either 'Yes' or 'No'.\n3. Output all phrases that passed the feasibility check (i.e., those marked 'Yes' in Step 2).\n    - Output format: 'Step 3: ' followed by the selected phrases. Write each phrase on a separate line.\n    - Output non-empty text whenever possible.\n    - Do not include any explanations, notes, or metadata.\n\n**An example**\nSample: \nHoly Mary Mother of God, pray for us sinners now and at the hour of our death. Amen. #rosary #teamjesus #God #SemST\n\nDescription: \nA Twitter post with hashtags. The post may directly or indirectly imply: \nTopic: Atheism \nStance: AGAINST \nSentiment: POSITIVE\n\nOutput:\nStep 1: Holy Mary | Mother of God | pray for us sinners | now | and at the hour of | our death | Amen | #rosary | #teamjesus | #God | #SemST\nStep 2: Holy Mary - No | Mother of God - No | pray for us sinners - Yes | now - No | and at the hour of - No | our death - No | Amen - Yes | #rosary - Yes | #teamjesus - Yes | #God - Yes | #SemST - No\nStep 3: \npray for us sinners\nAmen\n#rosary\n#teamjesus\n#God"
+        },
+        {
+            "role": "user",
+            "content": "Sample:\n{sample}\n\nDescription:\nA Twitter post with hashtags. The post may directly or indirectly imply:\nTopic: {topic}\nStance: {stance}\nSentiment: {sentiment}"
+        }
+    ],
+    "replacement_rules": [
+    ]
+}

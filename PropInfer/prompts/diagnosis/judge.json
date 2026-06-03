@@ -1,0 +1,13 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You are given multiple candidate Patient-Doctor dialogues and a target diagnosis category (Digestion / mental disorder / childbirth / others). Select the candidate that best fits the target category — it should be a coherent, realistic medical dialogue whose complaint clearly belongs to the target category.\n\nOutput ONLY the index of the best candidate (1, 2, 3, ...). No explanation."
+        },
+        {
+            "role": "user",
+            "content": "Target diagnosis category: {attribute_value}\n\nCandidates:\n{sample}\n\nBest candidate index:"
+        }
+    ],
+    "replacement_rules": []
+}

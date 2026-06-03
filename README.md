@@ -1,2 +1,246 @@
-# Randomized-Quantization
-Official implementation of the paper 'Protecting Dataset-Level Secrets in Textual Data Sharing'
+# Protecting Dataset-Level Secrets in Textual Data Sharing
+
+Official code for **Randomized Quantization**, a training-free,
+LLM-agnostic data-release mechanism that protects *dataset-level* secrets
+(e.g., the proportion of samples in a sensitive attribute category) when
+sharing textual datasets, while preserving downstream utility.
+
+> **Abstract.** Sharing textual datasets enables many downstream applications
+> and research studies, but released text may reveal sensitive *global*
+> properties, such as the proportions of samples in particular attribute
+> categories. While existing work has largely focused on property-inference
+> *attacks*, *defenses* for these dataset-level secrets remain limited.
+> Differential privacy, though effective for protecting individual records,
+> can provide weak protection for aggregate properties. We propose
+> **Randomized Quantization**, which constructs candidate release
+> distributions for specified attribute types, randomly selects a release
+> distribution close to the private empirical distribution, and rewrites
+> private samples according to sampled target attribute combinations using
+> attribute-related snippets. We analyze its guarantee via **Statistic
+> Maximal Leakage (SML)** — protection against arbitrary attack strategies
+> under the worst-case data prior, robust to post-processing — and show it
+> outperforms differentially private data-generation baselines in both
+> privacy and utility.
+
+---
+
+## Repository structure
+
+```
+.
+├── tweet/        # Tweet Stance dataset  (Target / Stance / Sentiment)
+└── PropInfer/    # PropInfer medical dialogues (gender, diagnosis)
+```
+
+Each subproject is self-contained and shares the same pipeline design.
+
+```
+<project>/
+├── chow_liu.py / chow-liu.py   # Step 1: Chow–Liu tree + candidate release distributions
+├── quantization.py             # Step 2: randomized quantization -> target attribute arrays
+├── generation.py /             # Step 3: snippet extraction -> rewrite -> (judge)
+│   tweet_generation.py
+├── prompts/                    # SML generation prompts (per attribute domain)
+├── evaluation/
+│   ├── evaluate.py             # length / kNN precision-recall / FID / attribute-TV
+│   └── precision_recall.py
+├── attack/
+│   ├── labeling_attack.py      # LLM re-labels released text
+│   ├── proportion.py           # proportion-inference attack: diff vs. true proportions
+│   └── prompts/                # labeling prompts (per attribute domain)
+├── PE/                         # Baseline: Private Evolution (DPSDA)
+├── DPFT/                       # Baseline: DP-LoRA fine-tuning (Opacus + PEFT)
+├── data/                       # Private datasets
+└── run*.sh                     # End-to-end driver scripts
+```
+
+> The `data_analyze/` folders (plotting / table generation used only for the
+> paper figures) are intentionally **not** included in this release.
+
+---
+
+## Method overview
+
+Randomized Quantization releases a dataset in three steps:
+
+1. **Candidate release distributions (`chow_liu.py`).**
+   Approximate the joint attribute distribution as a product of factors via the
+   Chow–Liu algorithm, then build a pool of `γ` diverse candidate distributions
+   per factor (Dirichlet sampling + greedy max-min selection).
+
+2. **Randomized quantization (`quantization.py`).**
+   For each factor, compute the private empirical distribution, keep the
+   `k` closest candidates (by total-variation distance), and pick one
+   **uniformly at random**. Sample target attribute combinations from the
+   resulting product distribution and match them to private samples
+   (Hungarian assignment on weighted Hamming distance). The privacy bound is
+   controlled by the ratio `γ/k`.
+
+3. **Attribute-guided rewriting (`generation.py`).**
+   For each private sample, extract only the *attribute-related snippets*, then
+   rewrite the sample to match its assigned target attribute combination.
+   Optionally generate several candidates per sample and pick the best with an
+   LLM judge (`--duplicate`).
+
+**Evaluation** measures utility (token-length Wasserstein distance, kNN
+precision/recall, FID over sentence embeddings, attribute total-variation
+distance). **Attack** re-labels the released text with an LLM and compares
+inferred attribute proportions against the true private proportions
+(absolute difference = attack MAE).
+
+**Baselines.** `PE/` (Private Evolution, DPSDA) and `DPFT/` (DP-LoRA
+fine-tuning with Opacus), plus a simple random-subsampling baseline
+(`run_subsample.sh`), all evaluated under the same attack/utility metrics.
+
+---
+
+## Installation
+
+```bash
+# 1. Python deps
+pip install -r requirements.txt
+
+# 2. The Private Evolution library (used by PE/ and by all LLM calls)
+git clone https://github.com/microsoft/DPSDA.git
+pip install -e DPSDA
+```
+
+All LLM calls default to `meta-llama/Llama-3.1-8B-Instruct` via DPSDA's
+`HuggingfaceLLM`; pass `--model <hf-id>` to override. A CUDA GPU is required
+for the LLM generation and DP fine-tuning steps (a single 80 GB H100 is
+sufficient; for DP-LoRA the base model is loaded in bf16 with gradient
+checkpointing — see `DPFT/train.py`).
+
+---
+
+## Datasets
+
+| Project     | Data                                   | Secret attribute(s)                          |
+|-------------|----------------------------------------|----------------------------------------------|
+| `tweet/`    | Tweet Stance (SemEval-2016 Task 6)     | Target / Stance / Sentiment proportions      |
+| `PropInfer/`| PropInfer patient–doctor dialogues     | `gender` (female ratio 0.3/0.5/0.7); `diagnosis` (Digestion / mental disorder / childbirth / others) |
+
+**This release ships code only — no data is included.** Place the datasets
+under each project's `data/` directory before running:
+
+- **PropInfer** — generate the CSVs from the HuggingFace source:
+  ```bash
+  cd PropInfer && python download.py        # writes data/gender_*.csv, data/diagnosis.csv
+  ```
+- **Tweet** — download the SemEval-2016 Task 6 Tweet Stance dataset and save it
+  as `tweet/data/tweet.csv` with columns `Tweet,Target,Stance,Sentiment`.
+
+The `*_test.sh` smoke tests expect a small slice named `*_tmp.csv` in `data/`
+(e.g. `tweet/data/tweet_tmp.csv`); create one by sampling a few rows from the
+full file.
+
+---
+
+## Quick start
+
+Each command writes to a `results/` folder inside the project and is
+idempotent (finished steps are skipped on re-run).
+
+### Tweet
+
+```bash
+cd tweet
+
+# Randomized Quantization sweep (γ=120, k ∈ {10,15,20,30,40,60})
+./run.sh
+
+# Fixed-privacy sweep (γ/k held constant)
+./run_fixed_privacy.sh
+
+# Baselines
+./run_pe.sh            # Private Evolution, ε ∈ {1,2,3,4}
+./run_dpft.sh          # DP-LoRA fine-tuning, ε ∈ {1,2,3,4}
+./run_subsample.sh     # random 50% subsample
+
+# Robustness: re-run the attack with other LLMs (Mistral, Qwen)
+./run_attack_models.sh
+```
+
+### PropInfer
+
+```bash
+cd PropInfer
+
+./run.sh               # SML sweep over all 4 datasets (γ=120, k ∈ {10..60}, dup=2)
+./run_pe.sh            # Private Evolution, ε ∈ {1,2,3,4}, 6 iterations
+./run_dpft.sh          # DP-LoRA fine-tuning, ε ∈ {1,2,3,4}
+./run_subsample.sh
+./run_attack_models.sh
+```
+
+### Smoke tests
+
+Every project ships `*_test.sh` variants that run the whole pipeline on a
+handful of samples with tiny hyperparameters — use these to verify the
+environment before launching full runs:
+
+```bash
+./run_test.sh        # SML
+./run_pe_test.sh     # Private Evolution
+./run_dpft_test.sh   # DP fine-tuning
+```
+
+---
+
+## Running a single stage manually
+
+```bash
+# Step 1 — candidate distributions
+python chow_liu.py --data data/gender_0.5.csv --cols gender --gamma 120 --outdir bins
+
+# Step 2 — randomized quantization
+python quantization.py --data data/gender_0.5.csv \
+    --registry bins/model_registry.json --base-dir bins --k 30 \
+    --out-matched out/new_attributes.csv
+
+# Step 3 — attribute-guided rewriting
+python generation.py --data data/gender_0.5.csv \
+    --rewrite-attrs out/new_attributes.csv \
+    --snippets-out out/snippets.csv --save out/rewritten.csv \
+    --attribute-col gender --prompts-dir prompts/gender --duplicate 2
+
+# Evaluation
+python evaluation/evaluate.py --priv data/gender_0.5.csv \
+    --gen out/rewritten.csv --attr out/rewritten_with_attr.csv \
+    --attribute-cols gender --output out/evaluation.json
+
+# Attack
+python attack/labeling_attack.py --input out/rewritten.csv \
+    --output out/rewritten_labeled.csv --attribute-col gender \
+    --prompt attack/prompts/gender/labeling.json
+python attack/proportion.py --priv data/gender_0.5.csv \
+    --syn-labeled out/rewritten_labeled.csv --attribute-col gender \
+    --output out/attack/labeling_attack.json
+```
+
+(The `tweet/` project uses fixed column names `Target,Stance,Sentiment` and a
+single `prompts/` directory; see `tweet/run.sh` for exact invocations.)
+
+---
+
+## Key hyperparameters
+
+| Symbol        | Meaning                                              | Default |
+|---------------|------------------------------------------------------|---------|
+| `γ` (gamma)   | candidate distributions per factor                   | 120     |
+| `k`           | top-k closest candidates to sample from              | 30      |
+| `γ/k`         | controls the SML privacy bound (larger ⇒ more private) | 4     |
+| `duplicate`   | candidate rewrites per sample (LLM judge if >1)      | 2–3     |
+| `ε`           | DP budget for PE / DPFT baselines                    | 1–4     |
+
+---
+
+## Citation
+
+```bibtex
+@misc{randomized_quantization,
+  title  = {Protecting Dataset-Level Secrets in Textual Data Sharing},
+  author = {Anonymous Authors},
+  year   = {2026}
+}
+```

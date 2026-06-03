@@ -1,0 +1,23 @@
+{
+    "message_template": [
+        {
+            "role": "user",
+            "content": "Rephrase the following Patient-Doctor dialogue {tone} while preserving its medical meaning, the patient's symptoms, the diagnostic content, and the diagnosis category ({diagnosis}). Keep the same two-line format:\n  Patient: ...\n  Doctor: ...\nOutput ONLY the rephrased two-line dialogue. No labels or commentary.\n\nLENGTH:\n  - The rephrased dialogue must have similar overall length to the original — DO NOT shorten it into a brief summary.\n  - Keep all medical details (symptoms, history, differential diagnosis, tests, treatments, lifestyle advice, red flags).\n  - If the original is short, expand slightly with plausible medical detail rather than truncating.\n\nOriginal dialogue:\n{sample}\n\nRephrased dialogue:"
+        }
+    ],
+    "replacement_rules": [
+        {
+            "constraints": {},
+            "replacements": {
+                "tone": [
+                    "in slightly different wording",
+                    "in a more conversational style",
+                    "with a more formal clinical tone",
+                    "with simpler patient-friendly language",
+                    "with slightly more technical phrasing",
+                    "with reorganized sentence order"
+                ]
+            }
+        }
+    ]
+}

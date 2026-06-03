@@ -1,0 +1,26 @@
+{
+    "message_template": [
+        {
+            "role": "user",
+            "content": "Rephrase the following Twitter post {tone} while keeping its meaning, topic, stance, and sentiment unchanged. Output ONLY the rephrased tweet — no labels, no explanations, no quotes. Keep it under 280 characters.\n\nTopic: {Target}\nStance: {Stance}\nSentiment: {Sentiment}\n\nOriginal tweet:\n{sample}\n\nRephrased tweet:"
+        }
+    ],
+    "replacement_rules": [
+        {
+            "constraints": {},
+            "replacements": {
+                "tone": [
+                    "in a more casual way",
+                    "with a more emphatic tone",
+                    "in a more concise manner",
+                    "with slightly different wording",
+                    "with a more conversational tone",
+                    "with a more passionate tone",
+                    "in a more matter-of-fact manner",
+                    "with a touch of humor",
+                    "in a slightly more formal style"
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+# Core
+numpy
+pandas
+scipy
+scikit-learn
+tqdm
+
+# Embeddings / evaluation
+torch
+transformers
+sentence-transformers
+
+# Datasets (PropInfer download)
+datasets
+
+# DP fine-tuning baseline (DPFT/)
+opacus
+peft
+
+# NOTE: the Private Evolution baseline (PE/) and the LLM-based snippet
+# extraction / rewriting / labeling all use the DPSDA "pe" library, which is
+# installed separately from source:
+#     git clone https://github.com/microsoft/DPSDA.git
+#     pip install -e DPSDA
+# See https://microsoft.github.io/DPSDA/ for details.

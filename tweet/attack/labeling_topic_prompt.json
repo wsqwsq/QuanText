@@ -1,0 +1,18 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You will be given a Twitter post. Please summarize the topic of this Twitter post.\n- The topic can ONLY be:\n\t\"Hillary Clinton\",\n\t\"Feminist Movement\",\n\t\"Atheism\",\n\t\"Climate Change is a Real Concern\",\n\t\"Legalization of Abortion\",\n\t\"Donald Trump\".\n- ONLY output the topic (no notes or commentary)."
+        },
+        {
+            "role": "user",
+            "content": "Twitter post: \n{text}"
+        }
+    ],
+    "replacement_rules": [
+    	{
+            "constraints": {},
+            "replacements": {}
+        }
+    ]
+}

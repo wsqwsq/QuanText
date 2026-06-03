@@ -1,0 +1,13 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You are given a Patient-Doctor medical dialogue. Classify the diagnosis category of the patient's primary complaint into exactly ONE of:\n  - Digestion         (stomach, bowel, GI, nausea, vomiting, diarrhea, indigestion, reflux, ulcer)\n  - mental disorder   (anxiety, depression, mood, panic, insomnia, psychiatric, bipolar, OCD)\n  - childbirth        (pregnancy, labor, delivery, postpartum, fetus, contractions, breastfeeding)\n  - others            (anything else)\n\nOutput exactly one of: Digestion / mental disorder / childbirth / others. No other text."
+        },
+        {
+            "role": "user",
+            "content": "Dialogue:\n{text}\n\nDiagnosis category:"
+        }
+    ],
+    "replacement_rules": []
+}

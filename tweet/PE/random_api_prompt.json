@@ -1,0 +1,47 @@
+{
+    "message_template": [
+        {
+            "role": "user",
+            "content": "Suppose that you are a {writer}. Write a single short Twitter post (under 280 characters) about the following topic with the specified stance and sentiment. Output ONLY the tweet text — no labels, no explanations, no quotes.\n\nTopic: {Target}\nStance: {Stance}\nSentiment: {Sentiment}\n\nTweet:"
+        }
+    ],
+    "replacement_rules": [
+        {
+            "constraints": {},
+            "replacements": {
+                "writer": [
+                    "casual social media user with a conversational tone",
+                    "passionate activist with a strong voice",
+                    "skeptical commentator with a sarcastic tone",
+                    "thoughtful observer with a measured tone",
+                    "young professional with a witty tone",
+                    "religious individual with a reverent tone",
+                    "politically engaged citizen with a frank tone",
+                    "humorous user fond of memes and jokes",
+                    "concerned parent with a sincere tone",
+                    "journalist sharing a brief take",
+                    "student sharing personal opinions",
+                    "satirical writer with an ironic tone",
+                    "blunt critic with a direct tone",
+                    "supportive ally with an encouraging tone",
+                    "reflective thinker with a philosophical tone",
+                    "scientist sharing factual perspective",
+                    "celebrity-style poster with a public-facing tone",
+                    "policy wonk citing data",
+                    "everyday person venting frustrations",
+                    "optimistic voice with a hopeful tone",
+                    "frustrated user with a grumbling tone",
+                    "patriotic citizen with a strong national identity",
+                    "feminist advocate with an empowered tone",
+                    "environmentalist with an urgent tone",
+                    "conservative thinker with a traditional tone",
+                    "progressive thinker with a reformist tone",
+                    "religious skeptic with a critical tone",
+                    "neutral commentator presenting facts",
+                    "philosophical commentator with a contemplative tone",
+                    "anonymous user with a no-nonsense tone"
+                ]
+            }
+        }
+    ]
+}

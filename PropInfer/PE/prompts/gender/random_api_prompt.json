@@ -1,0 +1,9 @@
+{
+    "message_template": [
+        {
+            "role": "user",
+            "content": "Write a realistic Patient-Doctor medical dialogue resembling a ChatDoctor consultation. The patient's gender is: {gender}.\n\nFormatting rules (FOLLOW EXACTLY):\n  - Two turns only.\n  - First line MUST start with 'Patient: ' followed by the patient describing their symptoms.\n  - Second line MUST start with 'Doctor: ' followed by a detailed medical response.\n  - Use natural gendered cues (pronouns, salutations, gender-specific anatomy or conditions) consistent with the patient's gender.\n  - Output ONLY the two-line dialogue. No labels, headers, or commentary.\n\nLENGTH (very important — real ChatDoctor entries are NOT short):\n  - Patient turn: 50-200 words covering symptom duration, severity, triggers, associated symptoms, relevant history, and concerns.\n  - Doctor turn: 100-400 words covering possible diagnoses (differential), recommended tests, treatment options, lifestyle advice, and red flags / when to seek urgent care.\n  - Do NOT produce a short toy dialogue. Be substantive and medically realistic.\n\nDialogue:"
+        }
+    ],
+    "replacement_rules": []
+}

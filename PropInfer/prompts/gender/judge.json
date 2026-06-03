@@ -1,0 +1,13 @@
+{
+    "message_template": [
+        {
+            "role": "system",
+            "content": "You are given multiple candidate Patient-Doctor dialogues and a target patient gender. Select the candidate that best fits the target gender — it should be a coherent, realistic medical dialogue whose patient cues (pronouns, anatomy, salutations, conditions) match the target gender.\n\nOutput ONLY the index of the best candidate (1, 2, 3, ...). No explanation."
+        },
+        {
+            "role": "user",
+            "content": "Target gender: {attribute_value}\n\nCandidates:\n{sample}\n\nBest candidate index:"
+        }
+    ],
+    "replacement_rules": []
+}
