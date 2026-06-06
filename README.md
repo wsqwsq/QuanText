@@ -1,26 +1,29 @@
-# Protecting Dataset-Level Secrets in Textual Data Sharing
+# QuanText: Protecting Dataset-Level Secrets in Textual Data Sharing
 
-Official code for **Randomized Quantization**, a training-free,
-LLM-agnostic data-release mechanism that protects *dataset-level* secrets
-(e.g., the proportion of samples in a sensitive attribute category) when
-sharing textual datasets, while preserving downstream utility.
+Official code for **QuanText** (Randomized Quantization for Text), a
+training-free, large-language-model-agnostic data-release mechanism that
+protects *dataset-level* secrets — such as the proportion of records
+associated with a particular gender, diagnosis, or stance — when sharing
+textual datasets, while preserving downstream utility.
 
-> **Abstract.** Sharing textual datasets enables many downstream applications
-> and research studies, but released text may reveal sensitive *global*
-> properties, such as the proportions of samples in particular attribute
-> categories. While existing work has largely focused on property-inference
-> *attacks*, *defenses* for these dataset-level secrets remain limited.
-> Differential privacy, though effective for protecting individual records,
-> can provide weak protection for aggregate properties. We propose
-> **Randomized Quantization**, which constructs candidate release
-> distributions for specified attribute types, randomly selects a release
-> distribution close to the private empirical distribution, and rewrites
-> private samples according to sampled target attribute combinations using
-> attribute-related snippets. We analyze its guarantee via **Statistic
-> Maximal Leakage (SML)** — protection against arbitrary attack strategies
-> under the worst-case data prior, robust to post-processing — and show it
-> outperforms differentially private data-generation baselines in both
-> privacy and utility.
+![QuanText pipeline](figure/QuanText.png)
+
+Given the attribute types over which the data holder wants to retain utility
+(e.g., topic and sentiment), QuanText:
+
+1. **constructs** a set of candidate release distributions over those attribute
+   types (approximating their joint distribution as a product of factors via
+   the Chow–Liu algorithm);
+2. **randomly selects** a release distribution that is close to the private
+   empirical distribution; and
+3. **rewrites** each private sample to match the chosen distribution, reusing
+   attribute-related snippets extracted from the original text.
+
+QuanText is inspired by the **Statistic Maximal Leakage (SML)** framework,
+which bounds leakage about a secret function of a data distribution: under
+ideal conditions QuanText satisfies a formal SML guarantee, and on real-world
+datasets it achieves a better empirical privacy–utility trade-off than
+competing data-generation baselines (Private Evolution, DP fine-tuning).
 
 ---
 
@@ -61,7 +64,7 @@ Each subproject is self-contained and shares the same pipeline design.
 
 ## Method overview
 
-Randomized Quantization releases a dataset in three steps:
+QuanText releases a dataset in three steps:
 
 1. **Candidate release distributions (`chow_liu.py`).**
    Approximate the joint attribute distribution as a product of factors via the
