@@ -59,8 +59,6 @@ Each subproject is self-contained and shares the same pipeline design.
 └── run*.sh                     # End-to-end driver scripts
 ```
 
-> The `data_analyze/` folders (plotting / table generation used only for the
-> paper figures) are intentionally **not** included in this release.
 
 ---
 
