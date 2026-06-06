@@ -6,7 +6,9 @@ protects *dataset-level* secrets — such as the proportion of records
 associated with a particular gender, diagnosis, or stance — when sharing
 textual datasets, while preserving downstream utility.
 
-![QuanText pipeline](figure/QuanText.png)
+<p align="center">
+  <img src="figure/QuanText.png" alt="QuanText pipeline" width="600">
+</p>
 
 Given the attribute types over which the data holder wants to retain utility
 (e.g., topic and sentiment), QuanText:
