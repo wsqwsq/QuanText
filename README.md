@@ -7,7 +7,7 @@ associated with a particular gender, diagnosis, or stance — when sharing
 textual datasets, while preserving downstream utility.
 
 <p align="center">
-  <img src="figure/QuanText.png" alt="QuanText pipeline" width="600">
+  <img src="figure/QuanText.png" alt="QuanText pipeline" width="400">
 </p>
 
 Given the attribute types over which the data holder wants to retain utility
